@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gemini APIキー取得マニュアル｜就活の木</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green:   #2d6a4f;
+  --mid:     #40916c;
+  --pale:    #d8f3dc;
+  --earth:   #8b5e3c;
+  --cream:   #faf8f4;
+  --border:  #c8e6d0;
+  --ink:     #2c2c2c;
+  --ink-mid: #5a5a5a;
+  --blue:    #1a73e8;
+  --blue-bg: #e8f0fe;
+  --red:     #d93025;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "Noto Sans JP", sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.8;
+  padding: 32px 16px 80px;
+}
+.container { max-width: 860px; margin: 0 auto; }
+
+/* ヘッダー */
+.hero {
+  background: linear-gradient(135deg, var(--green), var(--mid));
+  color: white;
+  border-radius: 18px;
+  padding: 36px 44px;
+  margin-bottom: 36px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '🔑';
+  position: absolute;
+  right: 32px; top: 16px;
+  font-size: 80px;
+  opacity: 0.15;
+}
+.hero h1 {
+  font-family: "Noto Serif JP", serif;
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+.hero p { font-size: 14px; opacity: .85; }
+.hero .tag {
+  display: inline-block;
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 20px;
+  padding: 3px 12px;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+/* ステップカード */
+.step-card {
+  background: white;
+  border-radius: 16px;
+  margin-bottom: 28px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(45,106,79,0.07);
+}
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 24px;
+  background: linear-gradient(to right, var(--pale), #fff);
+  border-bottom: 2px solid var(--border);
+}
+.step-num {
+  width: 40px; height: 40px;
+  background: var(--green);
+  color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 18px;
+  flex-shrink: 0;
+}
+.step-header h2 {
+  font-family: "Noto Serif JP", serif;
+  font-size: 17px;
+  color: var(--green);
+}
+.step-body { padding: 22px 24px; }
+.step-body p { font-size: 14px; color: var(--ink-mid); margin-bottom: 14px; }
+
+/* ヒントボックス */
+.tip {
+  background: var(--pale);
+  border-left: 4px solid var(--mid);
+  border-radius: 0 8px 8px 0;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--green);
+  margin: 12px 0;
+}
+.warn {
+  background: #fff8ec;
+  border-left: 4px solid #e6a817;
+  border-radius: 0 8px 8px 0;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #7a5000;
+  margin: 12px 0;
+}
+
+/* 画面モックアップ */
+.mockup-wrap {
+  background: #f1f3f4;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+}
+.mockup-label {
+  font-size: 11px;
+  color: #888;
+  margin-bottom: 8px;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+.browser {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #dadce0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.browser-bar {
+  background: #f8f9fa;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #dadce0;
+}
+.browser-dots { display: flex; gap: 5px; }
+.browser-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+.dot-red { background: #ff5f57; }
+.dot-yellow { background: #febc2e; }
+.dot-green { background: #28c840; }
+.browser-url {
+  flex: 1;
+  background: #fff;
+  border: 1px solid #dadce0;
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 12px;
+  color: #555;
+  font-family: monospace;
+}
+.browser-content { padding: 0; }
+
+/* Google AI Studio モックアップ */
+.aistudio-layout {
+  display: flex;
+  min-height: 280px;
+}
+.aistudio-sidebar {
+  width: 200px;
+  background: #f8f9fa;
+  border-right: 1px solid #e0e0e0;
+  padding: 16px 0;
+  flex-shrink: 0;
+}
+.aistudio-logo {
+  padding: 0 16px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a73e8;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 8px;
+}
+.sidebar-item {
+  padding: 10px 16px;
+  font-size: 13px;
+  color: #555;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sidebar-item.active {
+  background: #e8f0fe;
+  color: #1a73e8;
+  font-weight: 600;
+  border-right: 3px solid #1a73e8;
+}
+.aistudio-main {
+  flex: 1;
+  padding: 20px 24px;
+}
+.aistudio-title {
+  font-size: 22px;
+  font-weight: 400;
+  color: #202124;
+  margin-bottom: 20px;
+}
+.aistudio-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px solid #dadce0;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #444;
+  background: white;
+  cursor: pointer;
+  margin-right: 8px;
+}
+.aistudio-btn.primary {
+  background: var(--blue);
+  color: white;
+  border-color: var(--blue);
+}
+
+/* モーダルモックアップ */
+.modal-overlay {
+  background: rgba(0,0,0,0.4);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+.modal {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+.modal-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #202124;
+  margin-bottom: 16px;
+}
+.modal-label {
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 6px;
+}
+.modal-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #dadce0;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 14px;
+  color: #202124;
+}
+.modal-select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #dadce0;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 16px;
+  background: white;
+  color: #777;
+}
+.modal-select.filled { color: #202124; }
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.modal-btn {
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.modal-btn.cancel {
+  background: white;
+  border: 1px solid #dadce0;
+  color: #444;
+}
+.modal-btn.ok {
+  background: var(--blue);
+  border: none;
+  color: white;
+}
+.modal-btn.disabled {
+  background: #f1f3f4;
+  border: 1px solid #dadce0;
+  color: #aaa;
+}
+
+/* プロジェクト一覧 */
+.project-list { padding: 16px 24px; }
+.project-list-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  font-size: 12px;
+  color: #777;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 8px;
+}
+.project-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #f1f3f4;
+  font-size: 13px;
+}
+.project-name { color: var(--blue); font-weight: 500; }
+.project-link { color: var(--blue); font-size: 12px; }
+.project-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+.badge-free { background: #e8f5e9; color: #2e7d32; }
+.badge-tier1 { background: var(--blue-bg); color: var(--blue); }
+
+/* キー表示エリア */
+.key-display {
+  background: #f8f9fa;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 12px 0;
+  font-family: monospace;
+  font-size: 14px;
+  color: #202124;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.key-text {
+  flex: 1;
+  word-break: break-all;
+  color: var(--blue);
+}
+.copy-btn {
+  padding: 6px 12px;
+  background: var(--blue);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* ツール設定モックアップ */
+.tool-setting {
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 12px 0;
+}
+.tool-setting-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.tool-setting-label {
+  font-size: 12px;
+  color: #555;
+  width: 120px;
+  flex-shrink: 0;
+}
+.tool-setting-input {
+  flex: 1;
+  padding: 7px 12px;
+  border: 1px solid #dadce0;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: monospace;
+  background: white;
+  color: #202124;
+}
+.tool-toggle {
+  display: flex;
+  border: 1px solid #dadce0;
+  border-radius: 6px;
+  overflow: hidden;
+  flex: 1;
+}
+.toggle-btn {
+  flex: 1;
+  padding: 7px 0;
+  text-align: center;
+  font-size: 12px;
+  cursor: pointer;
+}
+.toggle-btn.active-blue {
+  background: #1565c0;
+  color: white;
+  font-weight: 600;
+}
+.toggle-btn.inactive { background: white; color: #555; }
+
+/* チェックリスト */
+.checklist { list-style: none; margin: 12px 0; }
+.checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--ink-mid);
+  margin-bottom: 8px;
+}
+.checklist li::before {
+  content: '✅';
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* フッター */
+.footer {
+  text-align: center;
+  font-size: 12px;
+  color: var(--mid);
+  margin-top: 40px;
+  padding-top: 18px;
+  border-top: 1px solid var(--pale);
+  font-style: italic;
+}
+
+@media (max-width: 600px) {
+  .hero { padding: 24px 20px; }
+  .step-body { padding: 16px; }
+  .aistudio-sidebar { display: none; }
+  .project-list-header, .project-row { grid-template-columns: 2fr 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヘッダー -->
+  <div class="hero">
+    <div class="tag">就活の木 公式マニュアル</div>
+    <h1>🔑 Gemini APIキー 取得・設定マニュアル</h1>
+    <p>カードなし・無料で5分でできます｜画面つき手順書</p>
+    <div style="margin-top:14px;">
+      <a href="index.html"
+         style="display:inline-block; padding:8px 18px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.5); border-radius:8px; color:white; font-size:13px; text-decoration:none;">
+        ← ES添削ツールに戻る
+      </a>
+    </div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <h2>Google AI Studio を開く</h2>
+    </div>
+    <div class="step-body">
+      <p>下記URLをブラウザで開いてください。Googleアカウントでログインします。</p>
+      <div class="tip">🌐 <strong>https://aistudio.google.com</strong> をブラウザで開く</div>
+
+      <div class="mockup-wrap">
+        <div class="mockup-label">📱 画面イメージ</div>
+        <div class="browser">
+          <div class="browser-bar">
+            <div class="browser-dots">
+              <div class="browser-dot dot-red"></div>
+              <div class="browser-dot dot-yellow"></div>
+              <div class="browser-dot dot-green"></div>
+            </div>
+            <div class="browser-url">aistudio.google.com</div>
+          </div>
+          <div class="browser-content">
+            <div class="aistudio-layout">
+              <div class="aistudio-sidebar">
+                <div class="aistudio-logo">Google AI Studio</div>
+                <div class="sidebar-item">🏠 Dashboard</div>
+                <div class="sidebar-item active">🔑 Get API key</div>
+                <div class="sidebar-item">📊 使用量</div>
+                <div class="sidebar-item">💳 課金</div>
+              </div>
+              <div class="aistudio-main">
+                <div class="aistudio-title">API キー</div>
+                <div style="display:flex; gap:8px; margin-bottom:20px;">
+                  <div class="aistudio-btn">📋 プロジェクト</div>
+                  <div class="aistudio-btn primary">⊕ APIキーを作成</div>
+                </div>
+                <div style="text-align:center; padding:30px; color:#999; font-size:13px;">
+                  🔑 APIキーはここに表示されます
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tip">💡 左メニューの「Get API key」または「APIキー」をクリックします</div>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <h2>「プロジェクト」を作成する</h2>
+    </div>
+    <div class="step-body">
+
+      <!-- プロジェクトとは -->
+      <div style="background:#fff8ec; border:1px solid #e6a817; border-radius:10px; padding:16px; margin-bottom:16px;">
+        <div style="font-weight:700; color:#7a5000; margin-bottom:8px; font-size:14px;">📁 「プロジェクト」って何？</div>
+        <p style="font-size:13px; color:#5a4000; margin:0; line-height:1.8;">
+          APIキーを発行するために、Googleは必ず<strong>「プロジェクト」</strong>という「入れ物」が必要です。<br>
+          難しく考えなくて大丈夫です。<strong>「ES添削用の箱を1つ作る」</strong>イメージです。<br>
+          名前は自由につけられます。例：<strong>「学生添削プロジェクト」</strong>
+        </p>
+      </div>
+
+      <p>「APIキーを作成」ボタンを押すと、下のような画面が出ます。<br>プロジェクトが必要なので、まず新しく作りましょう。</p>
+
+      <!-- 手順1：最初の画面 -->
+      <div style="font-weight:700; color:var(--green); margin:14px 0 8px; font-size:14px;">① まず「プロジェクトをインポート」を押す</div>
+      <div class="mockup-wrap">
+        <div class="mockup-label">📱 最初に出る画面</div>
+        <div class="browser">
+          <div class="browser-bar">
+            <div class="browser-dots">
+              <div class="browser-dot dot-red"></div>
+              <div class="browser-dot dot-yellow"></div>
+              <div class="browser-dot dot-green"></div>
+            </div>
+            <div class="browser-url">aistudio.google.com/api-keys</div>
+          </div>
+          <div class="browser-content">
+            <div class="modal-overlay">
+              <div class="modal">
+                <div class="modal-title">新しいキーを作成する</div>
+                <div class="modal-label">キー名の設定</div>
+                <input class="modal-input" value="Gemini API Key" readonly>
+                <div class="modal-label">インポートしたプロジェクトを選択</div>
+                <select class="modal-select" style="color:#999;">
+                  <option>No Cloud Projects Available</option>
+                </select>
+                <div style="text-align:center; margin:8px 0;">
+                  <div style="font-size:12px; color:#1a73e8; cursor:pointer; text-decoration:underline;">👇 プロジェクトをインポート ← ここを押す！</div>
+                </div>
+                <div class="modal-actions">
+                  <button class="modal-btn cancel">キャンセル</button>
+                  <button class="modal-btn disabled">キーを作成</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tip">💡 「No Cloud Projects Available」と出ても大丈夫！「プロジェクトをインポート」を押します</div>
+
+      <!-- 手順2：新規作成 -->
+      <div style="font-weight:700; color:var(--green); margin:18px 0 8px; font-size:14px;">② 「+ 新しいプロジェクトを作成」を押す</div>
+      <div class="mockup-wrap">
+        <div class="mockup-label">📱 プロジェクト作成画面</div>
+        <div class="browser">
+          <div class="browser-bar">
+            <div class="browser-dots">
+              <div class="browser-dot dot-red"></div>
+              <div class="browser-dot dot-yellow"></div>
+              <div class="browser-dot dot-green"></div>
+            </div>
+            <div class="browser-url">aistudio.google.com/api-keys</div>
+          </div>
+          <div class="browser-content">
+            <div style="padding:20px 24px;">
+              <div style="font-size:16px; font-weight:500; color:#202124; margin-bottom:16px;">プロジェクト</div>
+              <div style="display:flex; gap:8px; margin-bottom:16px;">
+                <div style="padding:7px 14px; border:1px solid #dadce0; border-radius:6px; font-size:13px; color:#444; background:white; cursor:pointer;">📋 プロジェクトについて</div>
+                <div style="padding:7px 14px; background:var(--blue); color:white; border-radius:6px; font-size:13px; cursor:pointer; font-weight:600;">✚ 新しいプロジェクトを作成 ← ここ！</div>
+                <div style="padding:7px 14px; border:1px solid #dadce0; border-radius:6px; font-size:13px; color:#444; background:white;">📥 プロジェクトをインポート</div>
+              </div>
+              <div style="background:#e8f0fe; border:1px solid #90caf9; border-radius:8px; padding:12px; font-size:13px; color:#1565c0;">
+                💡 「＋ 新しいプロジェクトを作成」を押してください
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 手順3：名前を入力 -->
+      <div style="font-weight:700; color:var(--green); margin:18px 0 8px; font-size:14px;">③ プロジェクト名を入力して「作成」を押す</div>
+      <div class="mockup-wrap">
+        <div class="mockup-label">📱 プロジェクト名入力画面</div>
+        <div class="browser">
+          <div class="browser-bar">
+            <div class="browser-dots">
+              <div class="browser-dot dot-red"></div>
+              <div class="browser-dot dot-yellow"></div>
+              <div class="browser-dot dot-green"></div>
+            </div>
+            <div class="browser-url">aistudio.google.com/api-keys</div>
+          </div>
+          <div class="browser-content">
+            <div class="modal-overlay">
+              <div class="modal">
+                <div class="modal-title">新しいプロジェクトを作成</div>
+                <div class="modal-label">プロジェクト名</div>
+                <input class="modal-input" value="学生添削プロジェクト" readonly style="color:var(--blue); font-weight:600;">
+                <div style="font-size:12px; color:#888; margin-bottom:14px;">※ 名前は何でもOKです。わかりやすい名前をつけてください。</div>
+                <div class="modal-actions">
+                  <button class="modal-btn cancel">キャンセル</button>
+                  <button class="modal-btn ok">作成</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tip">💡 プロジェクト名の例：「学生添削プロジェクト」「ES添削用」「キャリアカウンセラー用」など、わかりやすい名前で大丈夫です</div>
+
+      <!-- 手順4：完了 -->
+      <div style="font-weight:700; color:var(--green); margin:18px 0 8px; font-size:14px;">④ 作成完了！プロジェクトが選択できるようになる</div>
+      <div class="mockup-wrap">
+        <div class="mockup-label">📱 プロジェクト作成後の画面</div>
+        <div class="browser">
+          <div class="browser-bar">
+            <div class="browser-dots">
+              <div class="browser-dot dot-red"></div>
+              <div class="browser-dot dot-yellow"></div>
+              <div class="browser-dot dot-green"></div>
+            </div>
+            <div class="browser-url">aistudio.google.com/api-keys</div>
+          </div>
+          <div class="browser-content">
+            <div class="modal-overlay">
+              <div class="modal">
+                <div class="modal-title">新しいキーを作成する</div>
+                <div class="modal-label">キー名の設定</div>
+                <input class="modal-input" value="Gemini API Key" readonly>
+                <div class="modal-label">インポートしたプロジェクトを選択</div>
+                <select class="modal-select filled">
+                  <option>学生添削プロジェクト ✅</option>
+                </select>
+                <div class="modal-actions">
+                  <button class="modal-btn cancel">キャンセル</button>
+                  <button class="modal-btn ok">キーを作成 ← 押せるようになった！</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tip">💡 プロジェクトが選択できたら「キーを作成」ボタンが青くなります。押してください！</div>
+
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">3</div>
+      <h2>APIキーを作成する</h2>
+    </div>
+    <div class="step-body">
+      <p>プロジェクトをインポートすると、キー作成ボタンが押せるようになります。</p>
+
+      <div class="mockup-wrap">
+        <div class="mockup-label">📱 キー作成画面</div>
+        <div class="browser">
+          <div class="browser-bar">
+            <div class="browser-dots">
+              <div class="browser-dot dot-red"></div>
+              <div class="browser-dot dot-yellow"></div>
+              <div class="browser-dot dot-green"></div>
+            </div>
+            <div class="browser-url">aistudio.google.com/api-keys</div>
+          </div>
+          <div class="browser-content">
+            <div class="modal-overlay">
+              <div class="modal">
+                <div class="modal-title">新しいキーを作成する</div>
+                <div class="modal-label">キー名の設定</div>
+                <input class="modal-input" value="Gemini API Key" readonly>
+                <div class="modal-label">インポートしたプロジェクトを選択</div>
+                <select class="modal-select filled">
+                  <option>my-project</option>
+                </select>
+                <div class="modal-actions">
+                  <button class="modal-btn cancel">キャンセル</button>
+                  <button class="modal-btn ok">キーを作成</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p style="margin-top:14px;">「キーを作成」を押すと、<strong>AIza…</strong> で始まるキーが表示されます。</p>
+
+      <div class="mockup-wrap">
+        <div class="mockup-label">📱 APIキー表示画面</div>
+        <div class="browser">
+          <div class="browser-bar">
+            <div class="browser-dots">
+              <div class="browser-dot dot-red"></div>
+              <div class="browser-dot dot-yellow"></div>
+              <div class="browser-dot dot-green"></div>
+            </div>
+            <div class="browser-url">aistudio.google.com/api-keys</div>
+          </div>
+          <div class="browser-content">
+            <div class="project-list">
+              <div class="project-list-header">
+                <div>プロジェクト</div>
+                <div>キー</div>
+                <div>作成日時</div>
+                <div>請求階層</div>
+                <div>ステータス</div>
+              </div>
+              <div class="project-row">
+                <div class="project-name">my-project</div>
+                <div class="project-link">1キー</div>
+                <div style="font-size:12px; color:#555;">2026/xx/xx</div>
+                <div><span class="project-badge badge-free">無料枠</span></div>
+                <div style="font-size:12px;">✅</div>
+              </div>
+            </div>
+            <div style="padding:0 20px 16px;">
+              <div class="key-display">
+                <div class="key-text">AIzaSy●●●●●●●●●●●●●●●●●●●●●●</div>
+                <button class="copy-btn">📋 コピー</button>
+              </div>
+              <div style="font-size:12px; color:#e53935;">⚠️ このキーは一度しか表示されません。必ずコピーして保存してください。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="warn">⚠️ キーは一度しか表示されません！必ずコピーしてメモ帳に保存してください</div>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">4</div>
+      <h2>ES添削ツールにAPIキーを設定する</h2>
+    </div>
+    <div class="step-body">
+      <p>ツールを開いて、右上の「⚙️ API設定」からGeminiのAPIキーを登録します。</p>
+
+      <div class="mockup-wrap">
+        <div class="mockup-label">📱 ES添削ツール 設定画面</div>
+        <div class="browser">
+          <div class="browser-bar">
+            <div class="browser-dots">
+              <div class="browser-dot dot-red"></div>
+              <div class="browser-dot dot-yellow"></div>
+              <div class="browser-dot dot-green"></div>
+            </div>
+            <div class="browser-url">tanukin0423.github.io/es-tensaku-all/</div>
+          </div>
+          <div class="browser-content" style="padding:16px 20px;">
+            <div style="font-size:11px; color:#888; margin-bottom:10px; font-weight:600;">API設定パネル（⚙️ API設定をクリックで開く）</div>
+            <div class="tool-setting">
+              <div style="margin-bottom:12px;">
+                <div style="font-size:12px; color:#555; margin-bottom:6px; font-weight:600;">🔌 使用するAPI</div>
+                <div class="tool-toggle">
+                  <div class="toggle-btn inactive">🟣 Claude（Anthropic）</div>
+                  <div class="toggle-btn active-blue">🔵 Gemini（Google・無料枠あり）</div>
+                </div>
+              </div>
+              <div class="tool-setting-row">
+                <div class="tool-setting-label">Google APIキー</div>
+                <input class="tool-setting-input" value="AIzaSy●●●●●●●●●●●●●" readonly>
+              </div>
+              <div style="text-align:right; margin-top:8px;">
+                <button style="padding:6px 16px; background:#1565c0; color:white; border:none; border-radius:6px; font-size:13px; cursor:pointer;">💾 保存</button>
+              </div>
+            </div>
+            <div style="font-size:12px; color:#40916c; margin-top:8px;">✅ APIキーを保存しました</div>
+          </div>
+        </div>
+      </div>
+
+      <ul class="checklist" style="margin-top:14px;">
+        <li>「⚙️ API設定」ボタンをクリック</li>
+        <li>「🔵 Gemini（Google・無料枠あり）」を選択</li>
+        <li>APIキー入力欄に「AIza…」のキーを貼り付け</li>
+        <li>「💾 保存」ボタンを押す</li>
+        <li>「✅ APIキーを保存しました」と表示されたら完了</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">5</div>
+      <h2>添削してみる</h2>
+    </div>
+    <div class="step-body">
+      <p>設定完了後、ES文章を入力して「✦ Gemini で添削」ボタンを押します。</p>
+
+      <div class="mockup-wrap">
+        <div class="mockup-label">📱 添削結果イメージ</div>
+        <div class="browser">
+          <div class="browser-bar">
+            <div class="browser-dots">
+              <div class="browser-dot dot-red"></div>
+              <div class="browser-dot dot-yellow"></div>
+              <div class="browser-dot dot-green"></div>
+            </div>
+            <div class="browser-url">tanukin0423.github.io/es-tensaku-all/</div>
+          </div>
+          <div class="browser-content" style="padding:16px 20px;">
+            <div style="display:flex; gap:8px; margin-bottom:14px;">
+              <div style="flex:1; padding:10px; background:#2d6a4f; color:white; border-radius:8px; text-align:center; font-size:13px; font-weight:700;">🌳 Claude で添削</div>
+              <div style="flex:1; padding:10px; background:#6a1b9a; color:white; border-radius:8px; text-align:center; font-size:13px; font-weight:700;">⚡ 両方同時に添削</div>
+              <div style="flex:1; padding:10px; background:#1565c0; color:white; border-radius:8px; text-align:center; font-size:13px; font-weight:700;">✦ Gemini で添削</div>
+            </div>
+            <div style="background:#e3f2fd; border:1px solid #90caf9; border-left:3px solid #1565c0; border-radius:8px; padding:12px; font-size:12px; color:#1565c0;">
+              <strong>✦ Gemini の添削結果</strong><br>
+              <span style="color:#444;">📊 総合評価：○ 構造は整っていますが具体性を強化しましょう…<br>
+              🚫 NG表現：「貢献しました」→ 数字で示してください…<br>
+              ✏️ 書き換え提案：「チームの売上を前月比15%向上させ…」</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tip">💡 「両方同時に添削」ボタンでClaudeとGeminiを同時に比較できます！</div>
+
+      <div style="margin-top:16px; padding:16px; background:#e8f5e9; border:1px solid #a5d6a7; border-radius:10px; text-align:center;">
+        <div style="font-size:13px; color:#2e7d32; font-weight:700; margin-bottom:8px;">🌳 ツールを開く</div>
+        <a href="index.html"
+           style="display:inline-block; padding:10px 28px; background:#2d6a4f; color:white; border-radius:8px; font-size:14px; font-weight:700; text-decoration:none;">
+          ✦ ES添削ツール（Gemini版）を開く →
+        </a>
+        <div style="font-size:12px; color:#555; margin-top:8px;">
+          URL: https://tanukin0423.github.io/es-tensaku-all/
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- よくある質問 -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num" style="background:var(--earth);">Q</div>
+      <h2>よくある質問</h2>
+    </div>
+    <div class="step-body">
+      <div style="margin-bottom:16px;">
+        <div style="font-weight:700; color:var(--earth); margin-bottom:4px;">Q. クレジットカードは必要ですか？</div>
+        <div style="font-size:14px; color:var(--ink-mid);">A. 無料枠のみ使用する場合は不要です。カードなしで今日から使えます。</div>
+      </div>
+      <div style="margin-bottom:16px;">
+        <div style="font-weight:700; color:var(--earth); margin-bottom:4px;">Q. 無料枠はどのくらい使えますか？</div>
+        <div style="font-size:14px; color:var(--ink-mid);">A. Gemini 2.5 Flashで1日250回まで（日本時間午後4時にリセット）。添削用途には十分です。</div>
+      </div>
+      <div style="margin-bottom:16px;">
+        <div style="font-weight:700; color:var(--earth); margin-bottom:4px;">Q. 「レート制限に達しました」と出たら？</div>
+        <div style="font-size:14px; color:var(--ink-mid);">A. 日本時間午後4時まで待つとリセットされます。または翌日に再試行してください。</div>
+      </div>
+      <div style="margin-bottom:16px;">
+        <div style="font-weight:700; color:var(--earth); margin-bottom:4px;">Q. APIキーは安全ですか？</div>
+        <div style="font-size:14px; color:var(--ink-mid);">A. キーはブラウザ内にのみ保存されます。他のパソコンでは使えません。共用PCでの使用は避けてください。</div>
+      </div>
+      <div>
+        <div style="font-weight:700; color:var(--earth); margin-bottom:4px;">Q. 学生の個人情報は大丈夫ですか？</div>
+        <div style="font-size:14px; color:var(--ink-mid);">A. 無料枠では入力内容がGoogleの改善に使われる可能性があります。学生のフルネームや個人情報の入力は避けてください。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- フッター -->
+  <div class="footer">
+    🌳 就活の木 — あなたの就活を、木を育てるように丁寧にサポート<br>
+    © 多摩大学キャリア支援課 キャリ爺
+  </div>
+
+</div>
+</body>
+</html>
